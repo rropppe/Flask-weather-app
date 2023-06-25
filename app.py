@@ -1,39 +1,4 @@
-from flask import Flask, render_template, flash, redirect, url_for, session, request
-import requests
-from flask_sqlalchemy import SQLAlchemy
-from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, validators
-from werkzeug.security import generate_password_hash, check_password_hash
-
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
-app.secret_key = 'secret'
-db = SQLAlchemy(app)
-
-
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(50), unique=True, nullable=False)
-    password_hash = db.Column(db.String(128), nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-
-    def __repr__(self):
-        return '<Article %r>' & self.id
-
-
-class RegistrationForm(FlaskForm):
-    username = StringField(validators=[validators.DataRequired(), validators.Length(min=4, max=50)])
-    email = StringField(validators=[validators.DataRequired(), validators.Email()])
-    password = PasswordField(validators={validators.DataRequired(),
-                                         validators.EqualTo('confirm_password',
-                                                            message='Пароли не совпадают')})
-    confirm_password = PasswordField()
-
-
-class LoginForm(FlaskForm):
-    username = StringField(validators=[validators.DataRequired(), validators.Length(min=4, max=50)])
-    password = PasswordField(validators=[validators.DataRequired()])
-
+from forms import *
 
 @app.route('/')
 def index():
