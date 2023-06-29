@@ -1,5 +1,6 @@
 from forms import *
 
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -52,13 +53,18 @@ def logout():
 @app.route('/get_weather', methods=['POST'])
 def get_weather():
     city = request.form['city']
-    api_key = 'b41f842f9800a4d28dbe5d5bbea18a3e'
+    api_key = os.getenv('API_KEY')
     url = f'http://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}'
     response = requests.get(url)
     data = response.json()
     weather_description = data['weather'][0]['description']
     temperature = round(data['main']['temp'] - 273.15, 1)
     wind_speed = data['wind']['speed']
+
+    request_obj = Request(city=city, timestamp=datetime.now())
+    db.session.add(request_obj)
+    db.session.commit()
+
     return render_template('get_weather.html', city=city, weather=weather_description,
                            temperature=temperature, wind_speed=wind_speed)
 
@@ -82,5 +88,15 @@ def map():
     return render_template('map.html', url=url)
 
 
+@app.route('/view_history')
+def view_history():
+    if 'username' in session:
+        user = User.query.filter_by(username=session['username']).first()
+        requests = Request.query.filter_by(user_id=user.id).all()
+        return render_template('view_history.html', requests=requests)
+    else:
+        return redirect(url_for('login'))
+
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port='5006')
+    app.run(host='0.0.0.0', port='5000')

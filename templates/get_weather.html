@@ -28,6 +28,9 @@
         <li class="nav-item">
           <a class="nav-link" href="/map">Карта погоды</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/view_history">История поиска</a>
+        </li>
       </ul>
       <ul class="navbar-nav ml-auto">
         {% if session.logged_in %}
@@ -56,6 +59,7 @@
     <p>Погода: {{ weather }}</p>
     <p>Температура: {{ temperature }} °C</p>
     <p>Скорость ветра: {{ wind_speed }} m/s</p>
+    <a href="/weather" class="btn btn-success">Вернуться назад</a>
   </div>
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
     integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
