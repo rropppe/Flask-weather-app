@@ -1,5 +1,7 @@
 # Приложение для отслеживания погоды
 
+[![Actions Status](https://github.com/rropppe/kurasch/workflows/ci-start.yml/badge.svg)](https://github.com/rropppe/kursach/actions)
+
 ***Поиск городов и информация о погоде выполняется на английском языке.
 Например, Москва=Moscow***
 
