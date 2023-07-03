@@ -61,9 +61,11 @@ def get_weather():
     temperature = round(data['main']['temp'] - 273.15, 1)
     wind_speed = data['wind']['speed']
 
-    request_obj = Request(city=city, timestamp=datetime.now())
-    db.session.add(request_obj)
-    db.session.commit()
+    if 'username' in session:
+        user = User.query.filter_by(username=session['username']).first()
+        request_obj = Request(city=city, timestamp=datetime.now(), user=user)
+        db.session.add(request_obj)
+        db.session.commit()
 
     return render_template('get_weather.html', city=city, weather=weather_description,
                            temperature=temperature, wind_speed=wind_speed)
@@ -92,11 +94,11 @@ def map():
 def view_history():
     if 'username' in session:
         user = User.query.filter_by(username=session['username']).first()
-        requests = Request.query.filter_by(user_id=user.id).all()
-        return render_template('view_history.html', requests=requests)
+        requests = Request.query.filter_by(user=user).all()
+        return render_template('view_history.html', requests=requests, user=user)
     else:
         return redirect(url_for('login'))
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port='5000')
+    app.run(host='0.0.0.0')

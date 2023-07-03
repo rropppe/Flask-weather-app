@@ -48,8 +48,8 @@
     {% block content %}
     {% if requests %}
     <div class="container">
-        <h1>История запросов пользователя {{ session['username'] }}</h1>
-        <table>
+        <h1>История запросов пользователя {{ user.username }}</h1>
+        <table class="table table-striped">
             <thead>
                 <tr>
                     <th>Город</th>

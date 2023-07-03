@@ -16,7 +16,7 @@ class Request(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     city = db.Column(db.String(50), nullable=False)
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_username = db.Column(db.String(50), db.ForeignKey('user.username'))
 
     def __repr__(self):
         return '<Request %r>' % self.id
