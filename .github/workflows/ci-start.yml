@@ -24,4 +24,7 @@ jobs:
         pip install -r requirements.txt
 
     - name: Run app.py
-      run: python app.py
+      run: |
+          python app.py
+          sleep 15
+          echo ">>>> WORFKFLOW STOPPED <<<<"
