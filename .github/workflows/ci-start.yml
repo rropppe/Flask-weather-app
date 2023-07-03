@@ -23,8 +23,12 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Run app.py
+    - name: Run docker container
       run: |
-          python app.py
-          sleep 15
-          echo ">>>> WORFKFLOW STOPPED <<<<"
+          echo ">>>> Start Docker Container <<<<"
+          docker-compose up -d
+          echo ">>>> Check Docker Processes <<<<"
+          docker ps -a
+          echo ">>>> Check Docker Images <<<<"
+          docker images -a
+          
