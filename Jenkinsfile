@@ -54,7 +54,10 @@ pipeline {
                     sh "docker-compose down"
 
                     // Удаление локальных Docker-образов
-                    sh "docker rmi rrropppe/weather-app:${env.VERSION}"
+                    sh "docker rmi rrropppe/weather-app:latest"
+
+		    // Скачивание опубликованного образа
+		    sh "docker pull rrropppe/weathe-app:${env.VERSION}"
                 }
             }
         }
