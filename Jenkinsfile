@@ -11,29 +11,21 @@ pipeline {
                 script {
                     // Проверка подключения к GitHub
                     try {
-                        sh 'git ls-remote https://github.com/rropppe/Flask-weather-app.git'
+                        sh 'ping -c 4 github.com'
+                        sh 'curl -I https://github.com'
                     } catch (Exception e) {
-                        error "Unable to connect to GitHub repository. Please check your network connection and repository URL."
+                        error "Unable to connect to GitHub. Please check your network connection."
                     }
 
+                    // Клонирование репозитория
+                    checkout([$class: 'GitSCM', branches: [[name: '*/main']], doGenerateSubmoduleConfigurations: false, extensions: [], userRemoteConfigs: [[url: 'https://github.com/rropppe/Flask-weather-app.git', credentialsId: '8e4b6871-d3a9-41c8-a31d-484c89754962']]])
+
                     // Получаем последний тег
-                    def lastTag = sh(script: 'git describe --tags --abbrev=0', returnStdout: true).trim()
+                    def lastTag = sh(script: 'git describe --tags `git rev-list --tags --max-count=1`', returnStdout: true).trim()
                     echo "Last tag: ${lastTag}"
 
-                    // Вычисляем следующую версию
-                    def versionComponents = lastTag.tokenize('.')
-                    def major = versionComponents[0].toInteger()
-                    def minor = versionComponents[1].toInteger()
-                    def patch = versionComponents[2].toInteger() + 1
-                    def newTag = "${major}.${minor}.${patch}"
-                    echo "New tag: ${newTag}"
-
-                    // Выполняем тэгирование и пуш
-                    sh "git tag v${newTag}"
-                    sh "git push origin v${newTag}"
-
-                    // Сохраняем новую версию в переменную окружения
-                    env.VERSION = newTag
+                    // Сохраняем последнюю версию в переменную окружения
+                    env.VERSION = lastTag
                 }
             }
         }
