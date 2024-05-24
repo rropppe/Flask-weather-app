@@ -53,6 +53,15 @@ pipeline {
                 }
             }
         }
+
+        stage('Cleanup Docker Images') {
+            steps {
+                script {
+                    // Удаление локальных Docker-образов
+                    sh "docker rmi rrropppe/weather-app:${env.VERSION}"
+                }
+            }
+        }
     }
 
     post {
