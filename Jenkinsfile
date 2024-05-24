@@ -46,10 +46,10 @@ pipeline {
                     sh "echo ${DOCKER_HUB_TOKEN} | docker login --username rrropppe --password-stdin"
 
                     // Сборка Docker-образа
-                    sh "docker build -t rrropppe/rrropppe:${env.VERSION} ."
+                    sh "docker build -t rrropppe/weather-app:${env.VERSION} ."
 
                     // Публикация Docker-образа в Docker Hub
-                    sh "docker push rrropppe/rrropppe:${env.VERSION}"
+                    sh "docker push rrropppe/weather-app:${env.VERSION}"
                 }
             }
         }
