@@ -9,17 +9,6 @@ pipeline {
         stage('Checkout') {
             steps {
                 script {
-                    // Проверка подключения к GitHub
-                    try {
-                        sh 'ping -c 4 github.com'
-                        sh 'curl -I https://github.com'
-                    } catch (Exception e) {
-                        error "Unable to connect to GitHub. Please check your network connection."
-                    }
-
-                    // Клонирование репозитория
-                    checkout([$class: 'GitSCM', branches: [[name: '*/main']], doGenerateSubmoduleConfigurations: false, extensions: [], userRemoteConfigs: [[url: 'https://github.com/rropppe/Flask-weather-app.git', credentialsId: '8e4b6871-d3a9-41c8-a31d-484c89754962']]])
-
                     // Получаем последний тег
                     def lastTag = sh(script: 'git describe --tags `git rev-list --tags --max-count=1`', returnStdout: true).trim()
                     echo "Last tag: ${lastTag}"
@@ -54,9 +43,12 @@ pipeline {
             }
         }
 
-        stage('Cleanup Docker Images') {
+        stage('Cleanup Docker Resources') {
             steps {
                 script {
+                    // Остановка и удаление запущенных контейнеров
+                    sh "docker-compose down"
+
                     // Удаление локальных Docker-образов
                     sh "docker rmi rrropppe/weather-app:${env.VERSION}"
                 }
