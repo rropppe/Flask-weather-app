@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_HUB_CREDENTIALS = credentials('docker-hub-token') // Имя учетных данных Jenkins для токена Docker Hub
+        DOCKER_HUB_CREDENTIALS = credentials('dckr_pat_EUCjzakgpu98QMZVd-yGSyBMoFY') // Имя учетных данных Jenkins для токена Docker Hub
     }
 
     stages {
@@ -33,7 +33,10 @@ pipeline {
 
         stage('Docker Compose Up') {
             steps {
-                sh 'docker-compose up -d'
+                script {
+                    // Передаем версию тега в Docker Compose
+                    sh "VERSION=${env.VERSION} docker-compose up -d"
+                }
             }
         }
 
@@ -65,4 +68,3 @@ pipeline {
         }
     }
 }
-
