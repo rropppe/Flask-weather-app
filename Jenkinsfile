@@ -2,13 +2,20 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_HUB_CREDENTIALS = credentials('dckr_pat_EUCjzakgpu98QMZVd-yGSyBMoFY') // Имя учетных данных Jenkins для токена Docker Hub
+        DOCKER_HUB_CREDENTIALS = credentials('docker-hub-token') // Имя учетных данных Jenkins для токена Docker Hub
     }
 
     stages {
         stage('Checkout') {
             steps {
                 script {
+                    // Проверка подключения к GitHub
+                    try {
+                        sh 'git ls-remote https://github.com/rropppe/Flask-weather-app.git'
+                    } catch (Exception e) {
+                        error "Unable to connect to GitHub repository. Please check your network connection and repository URL."
+                    }
+
                     // Получаем последний тег
                     def lastTag = sh(script: 'git describe --tags --abbrev=0', returnStdout: true).trim()
                     echo "Last tag: ${lastTag}"
@@ -68,3 +75,4 @@ pipeline {
         }
     }
 }
+
