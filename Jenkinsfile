@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_HUB_CREDENTIALS = credentials('docker-hub-token') // Имя учетных данных Jenkins для токена Docker Hub
+        DOCKER_HUB_TOKEN = credentials('docker-hub-token') // Имя учетных данных Jenkins для токена Docker Hub
     }
 
     stages {
@@ -43,7 +43,7 @@ pipeline {
             steps {
                 script {
                     // Логинимся в Docker Hub
-                    sh "echo ${DOCKER_HUB_CREDENTIALS} | docker login --username rrropppe --password-stdin"
+                    sh "echo ${DOCKER_HUB_TOKEN} | docker login --username rrropppe --password-stdin"
 
                     // Сборка Docker-образа
                     sh "docker build -t rrropppe/rrropppe:${env.VERSION} ."
