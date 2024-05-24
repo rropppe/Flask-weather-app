@@ -57,7 +57,7 @@ pipeline {
                     sh "docker rmi -f weather-app_app:latest"
 
 		    // Скачивание опубликованного образа
-		    sh "docker pull rrropppe/weathe-app:${env.VERSION}"
+		    sh "docker pull rrropppe/weather-app:${env.VERSION}"
                 }
             }
         }
