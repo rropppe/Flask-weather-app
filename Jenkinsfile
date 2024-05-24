@@ -13,8 +13,12 @@ pipeline {
                     def lastTag = sh(script: 'git describe --tags `git rev-list --tags --max-count=1`', returnStdout: true).trim()
                     echo "Last tag: ${lastTag}"
 
+                    // Удаляем букву 'v' из тега
+                    def version = lastTag.replaceAll('^v', '')
+                    echo "Version without 'v': ${version}"
+
                     // Сохраняем последнюю версию в переменную окружения
-                    env.VERSION = lastTag
+                    env.VERSION = version
                 }
             }
         }
@@ -68,4 +72,3 @@ pipeline {
         }
     }
 }
-
