@@ -27,7 +27,7 @@ pipeline {
             steps {
                 script {
                     // Передаем версию тега в Docker Compose
-                    sh "VERSION=${env.VERSION} docker-compose up -d"
+                    sh "VERSION=${env.VERSION} docker-compose up -d --build"
                 }
             }
         }
