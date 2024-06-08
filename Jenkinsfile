@@ -3,11 +3,13 @@ pipeline {
 
     environment {
         DOCKER_HUB_TOKEN = credentials('docker-hub-token') // Имя учетных данных Jenkins для токена Docker Hub
+        DOCKER_HOST = 'unix:///var/run/docker.sock' // Указываем путь к Docker сокету
     }
 
     stages {
         stage('Checkout') {
             steps {
+                checkout scm
                 script {
                     // Получаем последний тег
                     def lastTag = sh(script: 'git describe --tags `git rev-list --tags --max-count=1`', returnStdout: true).trim()
@@ -54,10 +56,10 @@ pipeline {
                     sh "docker-compose down"
 
                     // Удаление локальных Docker-образов
-                    sh "docker rmi -f weather-app_app:latest"
+                    sh "docker rmi -f rrropppe/weather-app:${env.VERSION}"
 
-		    // Скачивание опубликованного образа
-		    sh "docker pull rrropppe/weather-app:${env.VERSION}"
+                    // Скачивание опубликованного образа
+                    sh "docker pull rrropppe/weather-app:${env.VERSION}"
                 }
             }
         }
@@ -75,3 +77,4 @@ pipeline {
         }
     }
 }
+
